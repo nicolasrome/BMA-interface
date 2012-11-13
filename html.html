@@ -3,8 +3,47 @@
 <head>
 	<title>bMa</title>
     <script type="text/javascript" src="jquery-1.8.2.js">&#160;</script>
+	<link rel="stylesheet" href="leaflet.css" />
 	<link rel="stylesheet/less" type="text/css" href="styles.less">
 	<script src="less-1.3.1.min.js" type="text/javascript"></script>
+	<script src="leaflet-src.js"></script>
+	<script src="lib/bma_gis.js"></script>
+	<script type="text/javascript">
+
+	var WMS_URL = 'http://bmawms.specgis.be/service';
+	var WMS_LAYER = 'bMa';
+	var PG_URL = 'http://specgis.be:8001/';
+	// var PG_URL = 'http://localhost:8001/';
+	var MAP_TITLE = 'Map Title';
+
+	$(document).ready(function(){
+
+	    BG.init(WMS_URL, PG_URL, WMS_LAYER, MAP_TITLE);
+	    BG.install_map('map', function(data){
+	            if(data.length > 0)
+	            {
+	                BG.get_pos(data[0], 'map_container', function(gdata){
+	                        var mk = $('#marker');
+	                        var mapo = $('#map').offset();
+	                        mk.offset({
+	                            top:mapo.top + gdata.ctnr_point.y - 5,
+	                            left:mapo.left + gdata.ctnr_point.x - 5
+	                        });
+	                        console.log(gdata);
+	                    });
+	            }
+	        });
+
+		/*
+	    var pos = $('#pos');
+	    BG.get_map().on('mousemove', function(evt){
+	
+	       pos.html('lat: '+evt.latlng.lat+'<br /> lng: '+evt.latlng.lng); 
+	    });
+		*/
+
+	});
+	</script>
     <script type="text/javascript" src="script.js">&#160;</script>
 </head>
 <body>
@@ -151,7 +190,7 @@
     <div id="map">
       
     </div>
-	<div id="console">
+	<div id="console" style="display:none;">
 		
 	</div>
   </div>
